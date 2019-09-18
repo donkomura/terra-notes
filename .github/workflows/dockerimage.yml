@@ -12,7 +12,7 @@ jobs:
     - name: Terraform Init
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-      run: |
+    - run: |
           if [ -d "environments/$GITHUB_HEAD_REF/" ]; then
             cd environments/$GITHUB_REF_HEAD
             terraform init
@@ -38,7 +38,7 @@ jobs:
     - name: Terraform Plan
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-      run: | 
+    - run: | 
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
           terraform plan
@@ -64,7 +64,7 @@ jobs:
     - name: Terraform Apply
       if: github.event_name == 'pull_request' && github.ref == 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-      run: | 
+    - run: | 
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
           terraform apply -auto-approve
