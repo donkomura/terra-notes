@@ -6,28 +6,38 @@ on:
     - master
 
 jobs:
-  init:
+  on-pull-request:
+    name: On Pull Request
     runs-on: ubuntu-latest
     steps:
-    - name: Terraform Init
-      uses: hashicorp/terraform-github-actions/init@master
-      if: github.event_name == 'pull_request' && github.ref != 'apply'
-      working-directory: terraform
+    - name: Filter to PR Opened
+      uses: actions/bin/filter@master
+      with:
+        args: "action 'opened|synchronize|rerequested'"
 
-  plan:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Terraform Plan
-      needs: "tf-init"
-      if: github.event_name == 'pull_request' && github.ref != 'apply'
-      uses: hashicorp/terraform-github-actions/plan@master
-      working-directory: terraform
+    - name: Checkout Repo
+      uses: actions/checkout@v1
 
-  apply:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Terraform Apply
-      needs: "tf-init"
-      if: github.event_name == 'pull_request' && github.ref == 'apply'
-      uses: hashicorp/terraform-github-actions/apply@master
-      working-directory: terraform
+    - name: Terraform - Format
+      uses: hashicorp/terraform-github-actions/fmt@v0.4.0
+      env:
+        TF_ACTION_WORKING_DIR: "./terraform"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform - Init
+      uses: hashicorp/terraform-github-actions/init@0.4.0
+      env:
+        TF_ACTION_WORKING_DIR: "./terraform"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform - Validate
+      uses: hashicorp/terraform-github-actions/validate@v0.4.0
+      env:
+        TF_ACTION_WORKING_DIR: "./terraform"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Terraform - Plan
+      uses: hashicorp/terraform-github-actions/plan@v0.4.0
+      env:
+        TF_ACTION_WORKING_DIR: "./terraform"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
