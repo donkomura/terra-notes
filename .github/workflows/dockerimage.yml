@@ -31,4 +31,4 @@ jobs:
       if: github.event_name == 'pull_request' && github.ref == 'apply'
       uses: docker://hashicorp/terraform:0.12.6
       with:
-      entrypoint: script/tf_apply.sh
+        entrypoint: script/tf_apply.sh
