@@ -15,7 +15,7 @@ jobs:
       with:
         entrypoint: /bin/sh
         args: 
-        - -c
+        - '-c'
         - |
           if [ -d "environments/$GITHUB_HEAD_REF/" ]; then
             cd environments/$GITHUB_REF_HEAD
@@ -44,7 +44,7 @@ jobs:
       with:
        entrypoint: /bin/sh
        args: 
-       - -c
+       - '-c'
        - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
@@ -73,7 +73,7 @@ jobs:
       with:
       entrypoint: /bin/sh
       args: 
-      - -c
+      - '-c'
       - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
