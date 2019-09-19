@@ -14,8 +14,7 @@ jobs:
       uses: docker://hashicorp/terraform:0.12.6
       with:
         entrypoint: /bin/sh
-        args: 
-        - '-c'
+        args: '-c'
         - |
           if [ -d "environments/$GITHUB_HEAD_REF/" ]; then
             cd environments/$GITHUB_REF_HEAD
@@ -43,8 +42,7 @@ jobs:
       uses: docker://hashicorp/terraform:0.12.6
       with:
        entrypoint: /bin/sh
-       args: 
-       - '-c'
+       args: '-c'
        - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
@@ -72,8 +70,7 @@ jobs:
       uses: docker://hashicorp/terraform:0.12.6
       with:
       entrypoint: /bin/sh
-      args: 
-      - '-c'
+      args: '-c'
       - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
