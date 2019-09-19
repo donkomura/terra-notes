@@ -16,25 +16,25 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Terraform - Format
-      uses: hashicorp/terraform-github-actions/fmt@master
+      uses: docker://hashicorp/terraform-github-actions/fmt@master
       env:
         TF_ACTION_WORKING_DIR: "./terraform"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Terraform - Init
-      uses: hashicorp/terraform-github-actions/init@0.4.0
+      uses: docker://hashicorp/terraform-github-actions/init@0.4.0
       env:
         TF_ACTION_WORKING_DIR: "./terraform"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Terraform - Validate
-      uses: hashicorp/terraform-github-actions/validate@master
+      uses: docker://hashicorp/terraform-github-actions/validate@master
       env:
         TF_ACTION_WORKING_DIR: "./terraform"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Terraform - Plan
-      uses: hashicorp/terraform-github-actions/plan@master
+      uses: docker://hashicorp/terraform-github-actions/plan@master
       env:
         TF_ACTION_WORKING_DIR: "./terraform"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
