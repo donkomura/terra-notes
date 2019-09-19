@@ -10,22 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Terraform Init
-      working-directory: terraform
-      if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: hashicorp/terraform-github-actions/init@master
+      if: github.event_name == 'pull_request' && github.ref != 'apply'
+      working-directory: terraform
 
   plan:
     runs-on: ubuntu-latest
     steps:
     - name: Terraform Plan
-      working-directory: terraform
+      needs: "tf-init"
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: hashicorp/terraform-github-actions/plan@master
+      working-directory: terraform
 
   apply:
     runs-on: ubuntu-latest
     steps:
     - name: Terraform Apply
-      working-directory: terraform
+      needs: "tf-init"
       if: github.event_name == 'pull_request' && github.ref == 'apply'
       uses: hashicorp/terraform-github-actions/apply@master
+      working-directory: terraform
