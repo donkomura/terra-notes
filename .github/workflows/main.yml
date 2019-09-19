@@ -9,25 +9,23 @@ jobs:
   init:
     runs-on: ubuntu-latest
     steps:
-    - uses: donkomura/terra-notes/terraform@master
     - name: Terraform Init
+      working-directory: terraform
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: hashicorp/terraform-github-actions/init@master
 
   plan:
     runs-on: ubuntu-latest
     steps:
-    - uses: donkomura/terra-notes/terraform@master
     - name: Terraform Plan
+      working-directory: terraform
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: hashicorp/terraform-github-actions/plan@master
 
   apply:
     runs-on: ubuntu-latest
     steps:
-    - uses: donkomura/terra-notes/terraform@master
     - name: Terraform Apply
+      working-directory: terraform
       if: github.event_name == 'pull_request' && github.ref == 'apply'
       uses: hashicorp/terraform-github-actions/apply@master
-      with:
-        entrypoint: script/tf_apply.sh
