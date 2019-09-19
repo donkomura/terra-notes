@@ -12,7 +12,11 @@ jobs:
     - name: Terraform Init
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-    - run: |
+      with:
+        entrypoint: /bin/sh
+        args: 
+        - -c
+        - |
           if [ -d "environments/$GITHUB_HEAD_REF/" ]; then
             cd environments/$GITHUB_REF_HEAD
             terraform init
@@ -30,7 +34,6 @@ jobs:
               cd ../../
             done
           fi
-      shell: sh
 
   plan:
     runs-on: ubuntu-latest
@@ -38,7 +41,11 @@ jobs:
     - name: Terraform Plan
       if: github.event_name == 'pull_request' && github.ref != 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-    - run: | 
+      with:
+       entrypoint: /bin/sh
+       args: 
+       - -c
+       - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
           terraform plan
@@ -56,7 +63,6 @@ jobs:
             cd ../../
           done
         fi
-      shell: sh
 
   apply:
     runs-on: ubuntu-latest
@@ -64,7 +70,11 @@ jobs:
     - name: Terraform Apply
       if: github.event_name == 'pull_request' && github.ref == 'apply'
       uses: docker://hashicorp/terraform:0.12.6
-    - run: | 
+      with:
+      entrypoint: /bin/sh
+      args: 
+      - -c
+      - |
         if [ -d "environments/$GITHUB_REF_HEAD/" ]; then
           cd environments/$GITHUB_REF_HEAD
           terraform apply -auto-approve
@@ -73,4 +83,3 @@ jobs:
           echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
           echo "*******************************************************************************"
         fi
-      shell: sh
