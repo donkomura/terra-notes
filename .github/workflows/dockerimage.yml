@@ -9,29 +9,22 @@ jobs:
   init:
     runs-on: ubuntu-latest
     steps:
-    - uses: ./
     - name: Terraform Init
       if: github.event_name == 'pull_request' && github.ref != 'apply'
-      uses: docker://hashicorp/terraform:0.12.6
-      with:
-        entrypoint: script/tf_init.sh
+      uses: hashicorp/terraform-github-actions/init@master
 
   plan:
     runs-on: ubuntu-latest
     steps:
-    - uses: ./
     - name: Terraform Plan
       if: github.event_name == 'pull_request' && github.ref != 'apply'
-      uses: docker://hashicorp/terraform:0.12.6
-      with:
-       entrypoint: script/tf_plan.sh
+      uses: hashicorp/terraform-github-actions/plan@master
 
   apply:
     runs-on: ubuntu-latest
     steps:
-    - uses: ./
     - name: Terraform Apply
       if: github.event_name == 'pull_request' && github.ref == 'apply'
-      uses: docker://hashicorp/terraform:0.12.6
+      uses: hashicorp/terraform-github-actions/apply@master
       with:
         entrypoint: script/tf_apply.sh
