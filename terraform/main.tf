@@ -37,17 +37,17 @@ resource "google_compute_instance" "development" {
   description  = "sample-gitops-tf"
   tags         = ["development", "mass"]
 
-  disk {
-    image = "ubuntu-os-cloud/ubuntu-1404-lts"
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
   }
 
-  disk {
-    type        = "local-ssd"
-    scratch     = true
-    auto_delete = true
+  scratch_disk {
   }
 
   network_interface {
+    network = "default"
     access_config {
     }
 
