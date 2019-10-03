@@ -38,6 +38,7 @@ steps:
   args: 
   - '-c'
   - |
+      cd terraform 
       terraform fmt
 
 - id: 'tf validate'
@@ -46,6 +47,7 @@ steps:
   args: 
   - '-c'
   - |
+      cd terraform 
       terraform validate
 
 # [START tf-apply]
