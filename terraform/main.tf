@@ -3,39 +3,9 @@ provider "google" {
   region      = "asia-northeast1"
 }
 
-resource "google_compute_network" "sample-gitops-tf" {
-  name = "sample-gitops-tf"
-}
-resource "google_compute_subnetwork" "development" {
-  name          = "development"
-  ip_cidr_range = "10.30.0.0/16"
-  network       = "${google_compute_network.sample-gitops-tf.name}"
-  description   = "development"
-  region        = "asia-northeast1"
-}
-
-resource "google_compute_firewall" "development" {
-  name    = "development"
-  network = "${google_compute_network.sample-gitops-tf.name}"
-
-  allow {
-    protocol = "icmp"
-  }
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22", "80", "443"]
-  }
-
-  target_tags = ["${google_compute_instance.development.tags}"]
-}
-
-resource "google_compute_instance" "development" {
-  name         = "development"
-  machine_type = "n1-standard-1"
-  zone         = "asia-northeast1-c"
-  description  = "sample-gitops-tf"
-  tags         = ["development", "mass"]
+resource "google_compute_instance" "vm_instance" {
+  name         = "terraform-instance"
+  machine_type = "f1-micro"
 
   boot_disk {
     initialize_params {
@@ -43,23 +13,9 @@ resource "google_compute_instance" "development" {
     }
   }
 
-  scratch_disk {
-  }
-
   network_interface {
-    network = "default"
+    network       = "default"
     access_config {
     }
-
-    subnetwork = "${google_compute_subnetwork.development.name}"
-  }
-
-  service_account {
-    scopes = ["userinfo-email", "compute-ro", "storage-ro", "bigquery", "monitoring"]
-  }
-
-  scheduling {
-    on_host_maintenance = "MIGRATE"
-    automatic_restart   = true
   }
 }
