@@ -20,7 +20,7 @@ steps:
       else
         for dir in environments/*/
         do 
-          cd ${dir}   
+          cd ${dir}
           env=${dir%*/}
           env=${env#*/}
           echo ""
@@ -31,31 +31,22 @@ steps:
           cd ../../
         done
       fi 
-# [START tf-plan]
-- id: 'tf plan'
+
+- id: 'tf fmt'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
-  - | 
-      if [ -d "terraform" ]; then
-        cd terraform 
-        terraform plan
-      else
-        for dir in environments/*/
-        do 
-          cd ${dir}   
-          env=${dir%*/}
-          env=${env#*/}  
-          echo ""
-          echo "*************** TERRAFOM PLAN ******************"
-          echo "******* At environment: ${env} ********"
-          echo "*************************************************"
-          terraform plan || exit 1
-          cd ../../
-        done
-      fi 
-# [END tf-plan]
+  - |
+      terraform fmt
+
+- id: 'tf validate'
+  name: 'hashicorp/terraform:0.12.6'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - |
+      terraform validate
 
 # [START tf-apply]
 - id: 'tf apply'
