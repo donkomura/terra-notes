@@ -1,5 +1,4 @@
 provider "google" {
-  credentials = "${file("../../../donkomura-playground-8e7604b85316.json")}"
   project     = "mass-sample-gitops-tf"
   region      = "asia-northeast1"
 }
