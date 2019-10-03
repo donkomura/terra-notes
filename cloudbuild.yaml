@@ -14,8 +14,8 @@ steps:
   args: 
   - '-c'
   - |
-      if [ -d "environments/$BRANCH_NAME/" ]; then
-        cd environments/$BRANCH_NAME
+      if [ -d "terraform" ]; then
+        cd terraform 
         terraform init
       else
         for dir in environments/*/
@@ -38,8 +38,8 @@ steps:
   args: 
   - '-c'
   - | 
-      if [ -d "environments/$BRANCH_NAME/" ]; then
-        cd environments/$BRANCH_NAME
+      if [ -d "terraform" ]; then
+        cd terraform 
         terraform plan
       else
         for dir in environments/*/
