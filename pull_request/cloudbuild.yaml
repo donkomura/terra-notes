@@ -8,6 +8,7 @@ steps:
       echo "***********************"
       echo "$BRANCH_NAME"
       echo "***********************"
+
 - id: 'tf init'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
@@ -31,6 +32,25 @@ steps:
           cd ../../
         done
       fi 
+
+- id: 'tf fmt'
+  name: 'hashicorp/terraform:0.12.6'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - |
+      cd terraform 
+      terraform fmt
+
+- id: 'tf validate'
+  name: 'hashicorp/terraform:0.12.6'
+  entrypoint: 'sh'
+  args: 
+  - '-c'
+  - |
+      cd terraform 
+      terraform validate
+
 # [START tf-plan]
 - id: 'tf plan'
   name: 'hashicorp/terraform:0.12.6'
