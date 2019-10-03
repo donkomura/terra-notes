@@ -1,5 +1,5 @@
 provider "google" {
-  project     = "mass-sample-gitops-tf"
+  project     = "donkomura-playground"
   region      = "asia-northeast1"
   zone = "asia-northeast1-b"  
 }
