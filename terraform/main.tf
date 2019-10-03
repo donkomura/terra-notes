@@ -1,12 +1,12 @@
 provider "google" {
   project     = "mass-sample-gitops-tf"
   region      = "asia-northeast1"
+  zone = "asia-northeast1-b"  
 }
 
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-instance"
   machine_type = "f1-micro"
-  zone = "asia-northeast1-b"  
 
   boot_disk {
     initialize_params {
