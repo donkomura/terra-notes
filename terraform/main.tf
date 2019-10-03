@@ -1,23 +1,23 @@
 provider "google" {
   credentials = "${file("#{service_account_json_file}")}"
-  project     = "mass-sample-gitops"
+  project     = "mass-sample-gitops-tf"
   region      = "asia-northeast1"
 }
 
-resource "google_compute_network" "sample-gitops" {
-  name = "sample-gitops"
+resource "google_compute_network" "sample-gitops-tf" {
+  name = "sample-gitops-tf"
 }
 resource "google_compute_subnetwork" "development" {
   name          = "development"
   ip_cidr_range = "10.30.0.0/16"
-  network       = "${google_compute_network.sample-gitops.name}"
+  network       = "${google_compute_network.sample-gitops-tf.name}"
   description   = "development"
   region        = "asia-northeast1"
 }
 
 resource "google_compute_firewall" "development" {
   name    = "development"
-  network = "${google_compute_network.sample-gitops.name}"
+  network = "${google_compute_network.sample-gitops-tf.name}"
 
   allow {
     protocol = "icmp"
@@ -35,7 +35,7 @@ resource "google_compute_instance" "development" {
   name         = "development"
   machine_type = "n1-standard-1"
   zone         = "asia-northeast1-c"
-  description  = "sample-gitops"
+  description  = "sample-gitops-tf"
   tags         = ["development", "mass"]
 
   disk {
