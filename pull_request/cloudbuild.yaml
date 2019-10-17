@@ -16,9 +16,6 @@ steps:
   - '-c'
   - |
       if [ -d "terraform" ]; then
-        cd terraform 
-        terraform init
-      else
         for dir in environments/*/
         do 
           cd ${dir}   
@@ -59,9 +56,6 @@ steps:
   - '-c'
   - | 
       if [ -d "terraform" ]; then
-        cd terraform 
-        terraform plan
-      else
         for dir in environments/*/
         do 
           cd ${dir}   
