@@ -36,8 +36,20 @@ steps:
   args: 
   - '-c'
   - |
-      cd terraform 
-      terraform fmt
+      if [ -d "terraform" ]; then
+        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        do 
+          cd terraform/${dir}
+          env=${dir%*/}
+          env=${env#*/}
+          echo ""
+          echo "*************** TERRAFORM FMT ******************"
+          echo "******* At environment: ${env} ********"
+          echo "*************************************************"
+          terraform fmt
+          cd ../../
+        done
+      fi 
 
 - id: 'tf validate'
   name: 'hashicorp/terraform:0.12.6'
@@ -45,8 +57,21 @@ steps:
   args: 
   - '-c'
   - |
-      cd terraform 
-      terraform validate
+      if [ -d "terraform" ]; then
+        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        do 
+          cd terraform/${dir}
+          env=${dir%*/}
+          env=${env#*/}
+          echo ""
+          echo "*************** TERRAFORM VALIDATE ******************"
+          echo "******* At environment: ${env} ********"
+          echo "*************************************************"
+          terraform validate 
+          cd ../../
+        done
+      fi 
+
 
 # [START tf-plan]
 - id: 'tf plan'
