@@ -16,7 +16,7 @@ steps:
   - '-c'
   - |
       if [ -d "terraform" ]; then
-        for dir in $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
           cd terraform/${dir}
           env=${dir%*/}
