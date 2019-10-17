@@ -11,8 +11,7 @@ type PubSubMessage struct {
 }
 
 type Logs struct {
-	PlanResult  string `json:"planResult"`
-	ApplyResult string `json:"applyResult"`
+	data string
 }
 
 func LogToSlack(cxt context.Context, m PubSubMessage) error {
@@ -21,5 +20,6 @@ func LogToSlack(cxt context.Context, m PubSubMessage) error {
 	if err != nil {
 		log.Fatalf("Error: %T message: %v", err, logs)
 	}
+	log.Printf("%+v", string(m))
 	return nil
 }

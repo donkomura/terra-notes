@@ -65,4 +65,6 @@ steps:
         echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
         echo "*******************************************************************************"
       fi
+
+  logsBucket: 'donkomura_cloudbuilds'
 # [END tf-apply]      
