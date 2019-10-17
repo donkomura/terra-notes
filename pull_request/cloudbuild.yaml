@@ -75,6 +75,5 @@ steps:
           cd ../../
         done
       fi 
-  logsBucket: 'donkomura_cloudbuilds'
 # [END tf-plan]
 
