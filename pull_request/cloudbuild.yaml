@@ -19,11 +19,9 @@ steps:
         for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
           cd terraform/${dir}
-          env=${dir%*/}
-          env=${env#*/}
           echo ""
           echo "*************** TERRAFORM INIT ******************"
-          echo "******* At directory: ${env} ********"
+          echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform init || exit 1
           cd ../../
