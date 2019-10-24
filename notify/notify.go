@@ -55,3 +55,8 @@ func (c *notifyConfig) Notify(parsedBody parser.PlanResult) error {
 
 	return nil
 }
+
+func (c *notifyConfig) DirectNotify(msg string) error {
+	_, err := c.postMessage(msg)
+	return err
+}
