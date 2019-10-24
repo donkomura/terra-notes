@@ -8,29 +8,6 @@ steps:
       echo "***********************"
       echo "$BRANCH_NAME"
       echo "***********************"
-- id: 'tf init'
-  name: 'hashicorp/terraform:0.12.6'
-  entrypoint: 'sh'
-  args: 
-  - '-c'
-  - |
-      if [ -d "terraform" ]; then
-        cd terraform 
-        terraform init
-      else
-        for dir in environments/*/
-        do 
-          cd ${dir}
-          env=${dir%*/}
-          env=${env#*/}
-          echo ""
-          echo "*************** TERRAFORM INIT ******************"
-          echo "******* At environment: ${env} ********"
-          echo "*************************************************"
-          terraform init || exit 1
-          cd ../../
-        done
-      fi 
 
 - id: 'tf fmt'
   name: 'hashicorp/terraform:0.12.6'
@@ -38,8 +15,18 @@ steps:
   args: 
   - '-c'
   - |
-      cd terraform 
-      terraform fmt
+      if [ -d "terraform" ]; then
+        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        do 
+          cd terraform/${dir}
+          echo ""
+          echo "*************** TERRAFORM FMT ******************"
+          echo "******* At directory: ${dir} ********"
+          echo "*************************************************"
+          terraform fmt
+          cd ../../
+        done
+      fi 
 
 - id: 'tf validate'
   name: 'hashicorp/terraform:0.12.6'
@@ -47,9 +34,18 @@ steps:
   args: 
   - '-c'
   - |
-      cd terraform 
-      terraform validate
-
+      if [ -d "terraform" ]; then
+        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        do 
+          cd terraform/${dir}
+          echo ""
+          echo "*************** TERRAFORM VALIDATE ******************"
+          echo "******* At directory: ${dir} ********"
+          echo "*************************************************"
+          terraform validate 
+          cd ../../
+        done
+      fi 
 # [START tf-apply]
 - id: 'tf apply'
   name: 'hashicorp/terraform:0.12.6'
@@ -62,9 +58,7 @@ steps:
         terraform apply -auto-approve
       else
         echo "***************************** SKIPPING APPLYING *******************************"
-        echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
+        echo "Branch '$BRANCH_NAME' does not represent an oficial directory."
         echo "*******************************************************************************"
       fi
-
-  logsBucket: 'donkomura_cloudbuilds'
 # [END tf-apply]      
