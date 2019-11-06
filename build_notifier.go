@@ -3,9 +3,12 @@ package functions
 import (
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
+	"cloud.google.com/go/storage"
 	"github.com/donkomura/terra-notes/notify"
 )
 
@@ -20,6 +23,7 @@ type BuildResult struct {
 	StartTime  string `json:"startTime,omitempty"`
 	FinishTime string `json:"finishTime,omitempty"`
 	LogURL     string `json:"logUrl,omitempty"`
+	LogsBucket string `json:"logsBucket,omitempty"`
 }
 
 func BuildStatus(ctx context.Context, m PubSubMessage) error {
@@ -36,10 +40,45 @@ func BuildStatus(ctx context.Context, m PubSubMessage) error {
 	if token == "" || channel == "" {
 		log.Fatalf("invalid slack token or channel: token[%v], channel[%v]", token, channel)
 	}
+	slack := notify.NewNotify(token, channel)
+	err = slack.DirectNotify(string(build.Status))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	if err := notify.NewNotify(token, channel).DirectNotify(string(m.Data)); err != nil {
+	logs, err := getLogsFromGCS(ctx, build.LogsBucket, build.BuildID)
+	if err != nil {
+		log.Fatalf("fail to get logs from GCS %v: %v", build.LogsBucket, err)
+	}
+	if logs == nil {
+		return nil
+	}
+
+	if err := slack.DirectNotify(string(logs)); err != nil {
 		log.Fatalf("fail to slack posting: %v", err)
 	}
 
 	return nil
+}
+
+func getLogsFromGCS(ctx context.Context, bucket, id string) ([]byte, error) {
+	log := "log-" + id + ".txt"
+
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if strings.HasPrefix(bucket, "gs://") {
+		bucket = bucket[len("gs://"):]
+	}
+	rc, err := client.Bucket(bucket).Object(log).NewReader(ctx)
+	if err != nil {
+		return nil, err
+	}
+	res, err := ioutil.ReadAll(rc)
+	if err != nil {
+		return nil, err
+	}
+	defer rc.Close()
+	return res, nil
 }

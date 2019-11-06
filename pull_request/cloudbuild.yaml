@@ -26,7 +26,7 @@ steps:
           terraform init || exit 1
           cd ../../
         done
-      fi 
+      fi
 
 - id: 'tf fmt'
   name: 'hashicorp/terraform:0.12.6'
@@ -47,6 +47,7 @@ steps:
         done
       fi 
 
+
 - id: 'tf validate'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
@@ -64,7 +65,8 @@ steps:
           terraform validate 
           cd ../../
         done
-      fi 
+      fi
+
 
 # [START tf-plan]
 - id: 'tf plan'
@@ -84,6 +86,7 @@ steps:
           terraform plan || exit 1
           cd ../../
         done
-      fi 
+      fi
 # [END tf-plan]
 
+logsBucket: "gs://donkomura_cloud_build_logs"
