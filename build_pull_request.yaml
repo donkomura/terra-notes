@@ -8,64 +8,63 @@ steps:
       echo "***********************"
       echo "$BRANCH_NAME"
       echo "***********************"
-
 - id: 'tf init'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      export root_dir=$(pwd)
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM INIT ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform init || exit 1
-          cd ../../
+          terraform init -no-color || exit 1
+          cd ${root_dir}
         done
       fi 
-
 - id: 'tf fmt'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      export root_dir=$(pwd)
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM FMT ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform fmt
-          cd ../../
+          terraform fmt -no-color || exit 1
+          cd ${root_dir}
         done
       fi 
-
 - id: 'tf validate'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      export root_dir=$(pwd)
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM VALIDATE ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform validate 
-          cd ../../
+          terraform validate -no-color || exit 1 
+          cd ${root_dir}
         done
       fi 
-
 # [START tf-plan]
 - id: 'tf plan'
   name: 'hashicorp/terraform:0.12.6'
@@ -73,17 +72,18 @@ steps:
   args: 
   - '-c'
   - | 
+      export root_dir=$(pwd)
       if [ -d "terraform" ]; then
-        for dir in $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFOM PLAN ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform plan || exit 1
-          cd ../../
+          terraform plan -no-color
+          cd ${root_dir}
         done
       fi 
 # [END tf-plan]
-
+logsBucket: "gs://$_LOGS_BUCKET_NAME"

@@ -21,7 +21,7 @@ func NewNotify(slackToken, slackChannel string) *notifyConfig {
 func (c *notifyConfig) postMessage(text string) (string, error) {
 	_, ts, err := slack.New(c.slackAPIToken).PostMessage(
 		c.slackChannel,
-		slack.MsgOptionText("```"+text+"```", false),
+		slack.MsgOptionText("```\n"+text+"\n```", false),
 	)
 
 	return ts, err
@@ -54,4 +54,9 @@ func (c *notifyConfig) Notify(parsedBody parser.PlanResult) error {
 	}
 
 	return nil
+}
+
+func (c *notifyConfig) DirectNotify(msg string) error {
+	_, err := c.postMessage(msg)
+	return err
 }
