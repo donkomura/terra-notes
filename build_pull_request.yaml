@@ -14,10 +14,7 @@ steps:
   args: 
   - '-c'
   - |
-      echo $(pwd)
       export root_dir=$(pwd)
-      ls $root_dir
-      cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
         do 
@@ -27,7 +24,7 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform init -no-color || exit 1
-          cd $root_dir
+          cd ${root_dir}
         done
       fi 
 - id: 'tf fmt'
@@ -36,9 +33,7 @@ steps:
   args: 
   - '-c'
   - |
-      echo $(pwd)
       export root_dir=$(pwd)
-      cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
         do 
@@ -48,7 +43,7 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform fmt -no-color || exit 1
-          cd $root_dir
+          cd ${root_dir}
         done
       fi 
 - id: 'tf validate'
@@ -67,7 +62,7 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform validate -no-color || exit 1 
-          cd $root_dir
+          ${root_dir}
         done
       fi 
 # [START tf-plan]
@@ -77,9 +72,7 @@ steps:
   args: 
   - '-c'
   - | 
-      echo $(pwd)
       export root_dir=$(pwd)
-      cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
         do 
@@ -88,8 +81,8 @@ steps:
           echo "*************** TERRAFOM PLAN ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform plan -no-color
-          cd $root_dir
+          terraform plan -no-clor || exit 1
+          cd ${root_dir}
         done
       fi 
 # [END tf-plan]
