@@ -81,7 +81,7 @@ steps:
           echo "*************** TERRAFOM PLAN ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform plan -no-clor || exit 1
+          terraform plan -no-color || exit 1
           cd ${root_dir}
         done
       fi 
