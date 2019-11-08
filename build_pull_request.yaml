@@ -15,7 +15,7 @@ steps:
   - '-c'
   - |
       echo $(pwd)
-      export root_dir=$(pwd)/..
+      export root_dir=$(pwd)
       ls $root_dir
       cd $root_dir
       if [ -d "terraform" ]; then
@@ -37,7 +37,7 @@ steps:
   - '-c'
   - |
       echo $(pwd)
-      export root_dir=$(pwd)/..
+      export root_dir=$(pwd)
       cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
@@ -57,7 +57,7 @@ steps:
   args: 
   - '-c'
   - |
-      export root_dir=$(pwd)/..
+      export root_dir=$(pwd)
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
         do 
@@ -78,7 +78,7 @@ steps:
   - '-c'
   - | 
       echo $(pwd)
-      export root_dir=$(pwd)/..
+      export root_dir=$(pwd)
       cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
