@@ -93,4 +93,4 @@ steps:
         done
       fi 
 # [END tf-plan]
-logsBucket: "gs://donkomura_cloud_build_logs"
+logsBucket: "gs://$_LOGS_BUCKET_NAME"
