@@ -10,24 +10,15 @@ import (
 
 	"cloud.google.com/go/storage"
 	"github.com/donkomura/terra-notes/notify"
+	"google.golang.org/api/cloudbuild/v1"
 )
 
 type PubSubMessage struct {
 	Data []byte `json:"data"`
 }
 
-type BuildResult struct {
-	BuildID    string `json:"id,omitempty"`
-	ProjectID  string `json:"projectId,omitempty"`
-	Status     string `json:"status,omitempty"`
-	StartTime  string `json:"startTime,omitempty"`
-	FinishTime string `json:"finishTime,omitempty"`
-	LogURL     string `json:"logUrl,omitempty"`
-	LogsBucket string `json:"logsBucket,omitempty"`
-}
-
 func BuildStatus(ctx context.Context, m PubSubMessage) error {
-	var build BuildResult
+	var build cloudbuild.Build
 
 	err := json.Unmarshal(m.Data, &build)
 	if err != nil {
@@ -46,7 +37,7 @@ func BuildStatus(ctx context.Context, m PubSubMessage) error {
 		log.Fatal(err)
 	}
 
-	logs, err := getLogsFromGCS(ctx, build.LogsBucket, build.BuildID)
+	logs, err := getLogsFromGCS(ctx, build.LogsBucket, build.Id)
 	if err != nil {
 		log.Fatalf("fail to get logs from GCS %v: %v", build.LogsBucket, err)
 	}

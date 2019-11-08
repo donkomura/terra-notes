@@ -8,13 +8,13 @@ steps:
       echo "***********************"
       echo "$BRANCH_NAME"
       echo "***********************"
-
 - id: 'tf init'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      root_dir = $(pwd)
       if [ -d "terraform" ]; then
         for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
@@ -24,16 +24,16 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform init || exit 1
-          cd ../../
+          cd $root_dir
         done
-      fi
-
+      fi 
 - id: 'tf fmt'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      root_dir = $(pwd)
       if [ -d "terraform" ]; then
         for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
@@ -43,17 +43,16 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform fmt
-          cd ../../
+          cd $root_dir
         done
       fi 
-
-
 - id: 'tf validate'
   name: 'hashicorp/terraform:0.12.6'
   entrypoint: 'sh'
   args: 
   - '-c'
   - |
+      root_dir = $(pwd)
       if [ -d "terraform" ]; then
         for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
@@ -63,11 +62,9 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform validate 
-          cd ../../
+          cd $root_dir
         done
-      fi
-
-
+      fi 
 # [START tf-plan]
 - id: 'tf plan'
   name: 'hashicorp/terraform:0.12.6'
@@ -75,6 +72,7 @@ steps:
   args: 
   - '-c'
   - | 
+      root_dir = $(pwd)
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
         do 
@@ -84,9 +82,8 @@ steps:
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
           terraform plan || exit 1
-          cd ../../
+          cd $root_dir
         done
-      fi
+      fi 
 # [END tf-plan]
-
 logsBucket: "gs://donkomura_cloud_build_logs"
