@@ -15,8 +15,8 @@ steps:
   - '-c'
   - |
       echo $(pwd)
-      ls -ld
       export root_dir=$(pwd)/..
+      ls $root_dir
       cd $root_dir
       if [ -d "terraform" ]; then
         for dir in $(find terraform -maxdepth 1 -type d)
