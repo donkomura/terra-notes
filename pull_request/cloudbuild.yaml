@@ -14,12 +14,13 @@ steps:
   args: 
   - '-c'
   - |
+      echo $(pwd)
       export root_dir=$(pwd)/..
       cd $root_dir
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM INIT ******************"
           echo "******* At directory: ${dir} ********"
@@ -34,17 +35,18 @@ steps:
   args: 
   - '-c'
   - |
+      echo $(pwd)
       export root_dir=$(pwd)/..
       cd $root_dir
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM FMT ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform fmt
+          terraform fmt || exit 1
           cd $root_dir
         done
       fi 
@@ -56,14 +58,14 @@ steps:
   - |
       export root_dir=$(pwd)/..
       if [ -d "terraform" ]; then
-        for dir in . $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFORM VALIDATE ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform validate 
+          terraform validate || exit 1 
           cd $root_dir
         done
       fi 
@@ -74,17 +76,18 @@ steps:
   args: 
   - '-c'
   - | 
+      echo $(pwd)
       export root_dir=$(pwd)/..
       cd $root_dir
       if [ -d "terraform" ]; then
-        for dir in $(find terraform -maxdepth 1 -type d -regex '^./[a-zA-Z].*' | cut -f 2 -d "/")
+        for dir in $(find terraform -maxdepth 1 -type d)
         do 
-          cd terraform/${dir}
+          cd ${dir}
           echo ""
           echo "*************** TERRAFOM PLAN ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform plan || exit 1
+          terraform plan
           cd $root_dir
         done
       fi 
