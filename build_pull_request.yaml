@@ -26,7 +26,7 @@ steps:
           echo "*************** TERRAFORM INIT ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform init || exit 1
+          terraform init -no-color || exit 1
           cd $root_dir
         done
       fi 
@@ -47,7 +47,7 @@ steps:
           echo "*************** TERRAFORM FMT ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform fmt || exit 1
+          terraform fmt -no-color || exit 1
           cd $root_dir
         done
       fi 
@@ -66,7 +66,7 @@ steps:
           echo "*************** TERRAFORM VALIDATE ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform validate || exit 1 
+          terraform validate -no-color || exit 1 
           cd $root_dir
         done
       fi 
@@ -88,7 +88,7 @@ steps:
           echo "*************** TERRAFOM PLAN ******************"
           echo "******* At directory: ${dir} ********"
           echo "*************************************************"
-          terraform plan
+          terraform plan -no-color
           cd $root_dir
         done
       fi 
